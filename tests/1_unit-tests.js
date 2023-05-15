@@ -10,7 +10,7 @@ const defaultPuzzle = "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9...
 
 
 suite('Unit Tests', () => {
-  /*
+  
   test('#1 Logic handles a valid puzzle string of 81 characters', (done) => {
     for (let prop of puzzlesAndSolutions){
       assert.property(solver.validate(prop[0]), 'result');
@@ -48,8 +48,8 @@ suite('Unit Tests', () => {
     done();
   });
 
-  test('#8 Logic handles a valid region (3x3 grid) placement', (done) => {
-    assert.equal(solver.checkRegionPlacement(defaultPuzzle, 'd', 4, 8), true);
+  test('#8.1 Logic handles a valid region (3x3 grid) placement', (done) => {
+    assert.equal(solver.checkRegionPlacement(defaultPuzzle, 'b', 3, 1), true);
     done();
   });
 
@@ -58,10 +58,9 @@ suite('Unit Tests', () => {
     done();
   });
   
-  */
+
   test('#10 Valid puzzle strings pass the solver', (done) => {
-    assert.isString(solver.solve(defaultPuzzle));
+    assert.equal(solver.solve(puzzlesAndSolutions[3][0]), puzzlesAndSolutions[3][1]);
     done();
   });
-
 });
