@@ -21,40 +21,44 @@ class SudokuSolver {
 
   checkRowPlacement(puzzleString, row, column, value) {
 
+    if (puzzleString.at( (this.grid[row.toLowerCase()] + Number(column) - 1) ) == value) return true;
+
     for (let key in this.grid){
       if (key == row.toLowerCase()) {
-        //console.log("Row For Check - " + puzzleString.slice(this.grid[key], this.grid[key] + 9));
-        //console.log("Value - " + value);
+
         if (puzzleString.slice(this.grid[key], this.grid[key] + 9).includes(value)) {
           return false;
         }
         break;
       }
     }
-    //console.log("Row ok!")
+
     return true;
   }
 
   checkColPlacement(puzzleString, row, column, value) {
     
     let rowForCheck = '';
+    
+    if (puzzleString[this.grid[row.toLowerCase()] + Number(column) - 1] == value) return true;
 
     for (let i = 0; i < 9; i++) {
         rowForCheck += puzzleString[ (column - 1) + (i * 9) ];
     }
     
-    //console.log("Col For Check - " + rowForCheck);
+
     if (rowForCheck.includes(value)){
       return false;
     }
-    //console.log("Col ok!");
     return true;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     
     let regionForCheck = '';
-    let startPointRegion = this.grid[row];
+    let startPointRegion = this.grid[row.toLowerCase()];
+    
+    if (puzzleString[this.grid[row.toLowerCase()] + Number(column) - 1] == value) return true;
     
     switch ((startPointRegion - (startPointRegion % 27)) / 27 ) {
       case 0:
@@ -78,7 +82,6 @@ class SudokuSolver {
         break;
     }
 
-    //console.log("StartPoint Region - " + startPointRegion);
     
     for (let i = 0; i < 3; i++) {
       for (let j = 0 ; j < 3; j++) {
@@ -87,16 +90,16 @@ class SudokuSolver {
       startPointRegion += 9;
     }
     
-    //console.log("Region For Check - " + regionForCheck);
     if (regionForCheck.includes(value)){
       return false;
     }
-    //console.log("Region ok!")
     return true;
     
   }
 
   solve(puzzleString) {
+
+    if (this.validate(puzzleString).hasOwnProperty('error') ) return false;
     
     let switcher = false;
     
@@ -110,23 +113,18 @@ class SudokuSolver {
         let value = j;
         
         let column = (indexOfDot % 9 == 0)? 1 : (indexOfDot % 9) + 1;
-
-        //console.log("--------------");
-        //console.log("Column - " + column);
-        //console.log("Row - " + row);
-        //console.log("Value - " + value);
         
         if (this.checkRowPlacement(puzzleString, row, column, value)){
           if (this.checkColPlacement(puzzleString, row, column, value)){
             if (this.checkRegionPlacement(puzzleString, row, column, value)){
 
               let newPuzzleString = puzzleString.replace('.', value);
-              //console.log("New probable puzzle string - " + newPuzzleString);
               let recursion = this.solve(newPuzzleString);
+              
               if (recursion) {
-                //if (.includes('.')) return puzzleString;
+
                 puzzleString = newPuzzleString.slice();
-                //console.log("New string - " + puzzleString);
+
                 switcher = true;
                 if (!recursion.includes('.')) return recursion;
               }
@@ -142,7 +140,7 @@ class SudokuSolver {
       } 
     }
     
-    console.log("Final Puzzle String - " + puzzleString);
+    //console.log("Final Puzzle String - " + puzzleString);
     
     return puzzleString;
   } 
